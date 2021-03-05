@@ -23,7 +23,7 @@ PASSWORD = None
 
 SENSOR_NAME = "co2_a"
 SENSOR_ID = 'co2_a'
-UNITS = 'ºC'
+UNITS = 'PPM'
 CLIENT_ID = f"sensor/{SENSOR_NAME}"
 connected = False
 
@@ -42,17 +42,19 @@ def on_connect(mqttc, obj, flags, rc):
     logger.info(f"Connected to {mqttc._host}:{mqttc._port}")
 
     mqttc.publish(f"{CLIENT_ID}/status", 'online', retain=True)
-    for t in ["c02", "light"]: 
-        for i in range(4):
+    for t in ["co2", "light"]: 
+        for i in range(3):
             # HA AUTOCONFIG
-            mqttc.publish(f'homeassistant/sensor/{t}_{i+1}/config', json.dumps({
+            msg = json.dumps({
                 'name': f"{t}_{i+1}",
                 'availability_topic': f'{CLIENT_ID}/status',  # Online, Offline
                 'device_class': t,
-                'unit_of_measurement': 'ºC' if t == 'co2' else '%',
+                'unit_of_measurement': 'PPM' if t == 'co2' else '',
                 'unique_id': f"{t}_{i+1}",
                 'state_topic': f'{t}_{i+1}/state',  # Value published
-                'force_update': True}), retain=True)
+                'force_update': True})
+            logger.info(msg)
+            mqttc.publish(f'homeassistant/sensor/{t}_{i+1}/config', msg, retain=True)
 
     return True
 
@@ -92,10 +94,12 @@ def loop(mqttc):
                     else:
                         sid = 3
 
-                    logger.info(f"co2_{sid}/state")
-                   
-                    mqttc.publish(f"co2_{sid}/state", round(float(row[2]) + (0.5-random.random())/5,4), retain=True)
+                    value = round(float(row[2]) + (0.5-random.random())/5,4)
+                    logger.info(f"co2_{sid}/state = {value}")
+                    mqttc.publish(f"co2_{sid}/state", value, retain=True)
                     
+                    value = row[4]
+                    logger.info(f"light_{sid}/state = {value}")
                     mqttc.publish(f"light_{sid}/state", row[4] , retain=True)
 
         time.sleep(10)
