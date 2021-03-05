@@ -4,5 +4,5 @@ services:
     build: ./temperature_humidity
     network_mode: host
   sensor_co2_light:
-    build: ./c02_light
+    build: ./co2_light
     network_mode: host
