@@ -1,0 +1,5 @@
+version: '3.8'
+services:
+  sensor_temp_hum:
+    build: ./temperature_humidity
+    network_mode: host
