@@ -37,13 +37,12 @@ def exit(signalNumber, frame):
 
 def on_connect(mqttc, obj, flags, rc):
     global connected
-    connected = True
-
-    logger.info(f"Connected to {mqttc._host}:{mqttc._port}")
 
     mqttc.publish(f"{CLIENT_ID}/status", 'online', retain=True)
-    for t in ["co2", "light"]: 
+    for t in ['co2', 'light']: 
+        logger.info(t)
         for i in range(3):
+            logger.info(i)
             # HA AUTOCONFIG
             msg = json.dumps({
                 'name': f"{t}_{i+1}",
@@ -55,7 +54,10 @@ def on_connect(mqttc, obj, flags, rc):
                 'force_update': True})
             logger.info(msg)
             mqttc.publish(f'homeassistant/sensor/{t}_{i+1}/config', msg, retain=True)
-
+    
+    logger.info(f"Connected to {mqttc._host}:{mqttc._port}")
+    connected = True
+    
     return True
 
 
