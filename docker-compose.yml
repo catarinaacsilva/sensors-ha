@@ -3,3 +3,6 @@ services:
   sensor_temp_hum:
     build: ./temperature_humidity
     network_mode: host
+  sensor_co2_light:
+    build: ./c02_light
+    network_mode: host
