@@ -128,4 +128,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-iot_telemetry_data.csv
+c02_light/iot_telemetry_data.csv
