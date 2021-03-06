@@ -47,8 +47,8 @@ def on_connect(mqttc, obj, flags, rc):
             msg = json.dumps({
                 'name': f"{t}_{i+1}",
                 'availability_topic': f'{CLIENT_ID}/status',  # Online, Offline
-                'device_class': t,
-                'unit_of_measurement': 'PPM' if t == 'co2' else '',
+                'device_class': 'power_factor' if t == 'light' else 'pressure',
+                'unit_of_measurement': 'PPM' if t == 'co2' else '%',
                 'unique_id': f"{t}_{i+1}",
                 'state_topic': f'{t}_{i+1}/state',  # Value published
                 'force_update': True})
@@ -57,7 +57,7 @@ def on_connect(mqttc, obj, flags, rc):
     
     logger.info(f"Connected to {mqttc._host}:{mqttc._port}")
     connected = True
-    
+
     return True
 
 
@@ -100,9 +100,9 @@ def loop(mqttc):
                     logger.info(f"co2_{sid}/state = {value}")
                     mqttc.publish(f"co2_{sid}/state", value, retain=True)
                     
-                    value = row[4]
+                    value = 1.0 if bool(row[4]) == True else 0.0
                     logger.info(f"light_{sid}/state = {value}")
-                    mqttc.publish(f"light_{sid}/state", row[4] , retain=True)
+                    mqttc.publish(f"light_{sid}/state", value , retain=True)
 
         time.sleep(10)
 
