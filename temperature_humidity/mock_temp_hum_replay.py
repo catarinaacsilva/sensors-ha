@@ -13,7 +13,7 @@ import signal
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
-SERVER = 'localhost'
+SERVER = '192.168.94.98'
 PORT = 1883
 USERNAME = None
 PASSWORD = None

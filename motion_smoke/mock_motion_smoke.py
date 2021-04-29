@@ -16,7 +16,7 @@ dataset = None
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
 
-SERVER = 'localhost'
+SERVER = '192.168.94.98'
 PORT = 1883
 USERNAME = None
 PASSWORD = None
@@ -143,7 +143,7 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Virtual Sensores HA')
-    parser.add_argument('-u', type=str, help='MQTT URL', default='localhost')
+    parser.add_argument('-u', type=str, help='MQTT URL', default='192.168.94.98')
     parser.add_argument('-p', type=int, help='MQTT Port', default=1883)
     parser.add_argument('-d', type=str, help='Sensor Dataset', default='iot_telemetry_data.csv')
     
