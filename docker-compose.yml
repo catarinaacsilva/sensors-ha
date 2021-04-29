@@ -9,3 +9,6 @@ services:
   sensor_motion_smoke:
     build: ./motion_smoke
     network_mode: host
+  sensor_lock:
+    build: ./lock
+    network_mode: host
